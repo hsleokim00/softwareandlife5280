@@ -85,22 +85,32 @@ for i in range(num_scoops):
     selected_flavors.append(flavor)
 
 # -----------------------------
-# 4. 결제 방법 선택 및 최종 가격
+# 4. 결제 방법 선택 (기프티콘 추가)
 # -----------------------------
 st.markdown("---")
 st.markdown("### 4️⃣ 결제 방법을 선택해 주세요")
 
 pay_method = st.radio(
-    "어떤 방법으로 결제하시나요? 💳💵",
-    ["카드 결제 💳", "현금 결제 💵"],
+    "어떤 방법으로 결제하시나요? 💳💵🎁",
+    ["카드 결제 💳", "현금 결제 💵", "기프티콘 결제 🎁"],
     horizontal=True,
 )
 
-# 결제 금액 (여기서는 용기별 고정 금액만 사용)
+gifticon_code = ""
+if pay_method == "기프티콘 결제 🎁":
+    gifticon_code = st.text_input(
+        "기프티콘 번호를 입력해 주세요 🎁",
+        placeholder="하이픈(-) 없이 숫자만 입력해 주세요",
+    )
+
+# 결제 금액 (용기별 고정 금액)
 final_price = base_price
 
 st.markdown("### 5️⃣ 주문 확인 & 결제")
 
+# -----------------------------
+# 5. 주문 완료 버튼 및 요약
+# -----------------------------
 if st.button("✅ 주문 완료하기"):
     st.success("주문이 접수되었습니다! 아래 내용을 한 번 더 확인해 주세요 😊")
 
@@ -120,6 +130,12 @@ if st.button("✅ 주문 완료하기"):
 
     # 결제 정보
     st.write("**결제 방법:**", pay_method)
+    if pay_method == "기프티콘 결제 🎁":
+        if gifticon_code.strip():
+            st.write("**입력한 기프티콘 번호:**", gifticon_code)
+            st.caption("기프티콘 번호는 직원에게도 함께 보여 주세요 😊")
+        else:
+            st.warning("⚠️ 기프티콘 결제를 선택하셨다면, 번호를 꼭 입력해 주세요!")
 
     # 최종 금액
     st.markdown(
